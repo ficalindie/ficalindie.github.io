@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ficalindie Fest 2025</title>
+    <style>
+        @font-face {
+            font-family: 'Lovelo Black';
+            src: url('font/lovelo_black.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #ff6b6b, #4ecdc4);
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .title {
+            font-family: 'Lovelo Black', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 2rem;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .title-logo {
+            position: absolute;
+            width: clamp(60px, 15vw, 120px);
+            height: clamp(60px, 15vw, 120px);
+            background: url('media/logo.png') center/contain no-repeat;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+            z-index: 2;
+        }
+
+        .coming-soon {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: #fff;
+            margin: 2rem 0;
+            position: relative;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+            font-family: "Lovelo Black", sans-serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .logo-trail {
+            position: absolute;
+            width: clamp(30px, 10vw, 60px);
+            height: clamp(30px, 10vw, 60px);
+            background: url('media/logo.png') center/contain no-repeat;
+            pointer-events: none;
+            opacity: 0;
+            animation: trailFloat 1.5s ease-out forwards;
+            mix-blend-mode: overlay;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(1deg); }
+            50% { transform: translateY(-15px) rotate(-1deg); }
+        }
+
+        @keyframes trailFloat {
+            0% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(
+                    calc(-50% + (var(--rand-x) * 200px)),
+                    calc(-50% + (var(--rand-y) * 200px))
+                ) scale(2) rotate(360deg);
+                filter: hue-rotate(180deg);
+            }
+        }
+
+        @media (hover: none) {
+            body {
+                cursor: pointer;
+            }
+        }
+        .text-distortion {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .container {
+            /* Keep previous styles */
+            filter: url(#displacementFilter);
+        }
+
+        .title, .coming-soon {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+        }
+
+        .dimensional-effect {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 40%);
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            filter: blur(20px);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-logo"></div>
+        <h1 class="title">Ficalindie Fest 2025</h1>
+        <div class="coming-soon">info (informazioni) soon (a breve)</div>
+    </div>
+
+    <script>
+        // Handle both mouse and touch events
+        function handleInteraction(e) {
+            const x = e.clientX || e.touches?.[0]?.clientX;
+            const y = e.clientY || e.touches?.[0]?.clientY;
+
+            // Create dimensional pull effect
+            const title = document.querySelector('.title');
+            const subtitle = document.querySelector('.coming-soon');
+            const containerRect = document.querySelector('.container').getBoundingClientRect();
+
+            // Calculate distance from text
+            const distX = Math.abs(x - (containerRect.left + containerRect.width/2));
+            const distY = Math.abs(y - (containerRect.top + containerRect.height/2));
+            const distance = Math.sqrt(distX*distX + distY*distY);
+
+            // Apply dimensional squash effect
+            if(distance < 300) {
+                const intensity = 1 - (distance/300);
+                title.style.transform = `
+                    perspective(1000px)
+                    scaleZ(${1 - intensity*0.5})
+                    rotateX(${intensity * 50}deg)
+                `;
+                subtitle.style.transform = `
+                    perspective(800px)
+                    scaleZ(${1 - intensity*0.3})
+                    rotateX(${intensity * 3}deg)
+                `;
+
+                // Create light burst
+                const effect = document.createElement('div');
+                effect.className = 'dimensional-effect';
+                effect.style.left = x + 'px';
+                effect.style.top = y + 'px';
+                effect.style.opacity = intensity;
+                effect.style.transform = `scale(${1 + intensity*2})`;
+                document.body.appendChild(effect);
+                setTimeout(() => effect.remove(), 1000);
+            } else {
+                title.style.transform = '';
+                subtitle.style.transform = '';
+            }
+        }
+
+        // Event listeners for both desktop and mobile
+        document.addEventListener('mousemove', handleInteraction);
+        document.addEventListener('touchmove', handleInteraction, { passive: true });
+
+        // Reset position on touch end
+        document.addEventListener('touchend', () => {
+            const container = document.querySelector('.container');
+            container.style.transform = 'perspective(1000px) rotateY(0) rotateX(0)';
+        });
+    </script>
+</body>
+</html>
