@@ -128,12 +128,12 @@
 
         .dimensional-effect {
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 40%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
             mix-blend-mode: overlay;
             pointer-events: none;
-            filter: blur(20px);
+            filter: blur(30px);
             opacity: 0;
         }
     </style>
@@ -151,43 +151,38 @@
             const x = e.clientX || e.touches?.[0]?.clientX;
             const y = e.clientY || e.touches?.[0]?.clientY;
 
-            // Create dimensional pull effect
-            const title = document.querySelector('.title');
-            const subtitle = document.querySelector('.coming-soon');
-            const containerRect = document.querySelector('.container').getBoundingClientRect();
+            if (!x || !y) return;
 
-            // Calculate distance from text
-            const distX = Math.abs(x - (containerRect.left + containerRect.width/2));
-            const distY = Math.abs(y - (containerRect.top + containerRect.height/2));
-            const distance = Math.sqrt(distX*distX + distY*distY);
+            // Logo trail effect
+            if (Math.random() < 0.3) {
+                const trail = document.createElement('div');
+                trail.className = 'logo-trail';
 
-            // Apply dimensional squash effect
-            if(distance < 300) {
-                const intensity = 1 - (distance/300);
-                title.style.transform = `
-                    perspective(1000px)
-                    scaleZ(${1 - intensity*0.5})
-                    rotateX(${intensity * 50}deg)
-                `;
-                subtitle.style.transform = `
-                    perspective(800px)
-                    scaleZ(${1 - intensity*0.3})
-                    rotateX(${intensity * 3}deg)
-                `;
+                const randX = (Math.random() - 0.5) * 2;
+                const randY = (Math.random() - 0.5) * 2;
 
-                // Create light burst
-                const effect = document.createElement('div');
-                effect.className = 'dimensional-effect';
-                effect.style.left = x + 'px';
-                effect.style.top = y + 'px';
-                effect.style.opacity = intensity;
-                effect.style.transform = `scale(${1 + intensity*2})`;
-                document.body.appendChild(effect);
-                setTimeout(() => effect.remove(), 1000);
-            } else {
-                title.style.transform = '';
-                subtitle.style.transform = '';
+                trail.style.setProperty('--rand-x', randX);
+                trail.style.setProperty('--rand-y', randY);
+                trail.style.left = x + 'px';
+                trail.style.top = y + 'px';
+                trail.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
+
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 1500);
             }
+
+            // 3D tilt effect (without scaling)
+            const container = document.querySelector('.container');
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const tiltX = (centerX - x) / 20;
+            const tiltY = (centerY - y) / 20;
+
+            container.style.transform = `
+                perspective(1000px)
+                rotateY(${tiltX}deg)
+                rotateX(${tiltY}deg)
+            `;
         }
 
         // Event listeners for both desktop and mobile
