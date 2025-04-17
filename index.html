@@ -1,199 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ficalindie Fest 2025</title>
-    <style>
-        @font-face {
-            font-family: 'Lovelo Black';
-            src: url('font/lovelo_black.otf') format('opentype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            touch-action: manipulation;
-        }
-
-        body {
-            background: radial-gradient(circle at center, #ff6b6b, #4ecdc4);
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-            overflow: hidden;
-            cursor: default;
-        }
-
-        .container {
-            text-align: center;
-            position: relative;
-            padding: 2rem;
-            transition: transform 0.3s ease;
-            perspective: 1000px;
-            transform-style: preserve-3d;
-        }
-
-        .title {
-            font-family: 'Lovelo Black', sans-serif;
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            margin-bottom: 2rem;
-            text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .title-logo {
-            position: absolute;
-            width: clamp(60px, 15vw, 120px);
-            height: clamp(60px, 15vw, 120px);
-            background: url('media/logo.png') center/contain no-repeat;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-            z-index: 2;
-        }
-
-        .coming-soon {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            color: #fff;
-            margin: 2rem 0;
-            position: relative;
-            display: inline-block;
-            animation: float 3s ease-in-out infinite;
-            font-family: "Lovelo Black", sans-serif;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .logo-trail {
-            position: absolute;
-            width: clamp(30px, 10vw, 60px);
-            height: clamp(30px, 10vw, 60px);
-            background: url('media/logo.png') center/contain no-repeat;
-            pointer-events: none;
-            opacity: 0;
-            animation: trailFloat 1.5s ease-out forwards;
-            mix-blend-mode: overlay;
-            z-index: 1;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(1deg); }
-            50% { transform: translateY(-15px) rotate(-1deg); }
-        }
-
-        @keyframes trailFloat {
-            0% {
-                opacity: 0.8;
-                transform: translate(-50%, -50%) scale(0.8);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(
-                    calc(-50% + (var(--rand-x) * 200px)),
-                    calc(-50% + (var(--rand-y) * 200px))
-                ) scale(2) rotate(360deg);
-                filter: hue-rotate(180deg);
-            }
-        }
-
-        @media (hover: none) {
-            body {
-                cursor: pointer;
-            }
-        }
-        .text-distortion {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        .container {
-            /* Keep previous styles */
-            filter: url(#displacementFilter);
-        }
-
-        .title, .coming-soon {
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            transform-style: preserve-3d;
-        }
-
-        .dimensional-effect {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-            mix-blend-mode: overlay;
-            pointer-events: none;
-            filter: blur(30px);
-            opacity: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ficalindie Fest 2025</title>
+  <style>
+    @font-face {
+      font-family: 'Lovelo Black';
+      src: url('font/lovelo_black.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; touch-action:manipulation; }
+    html, body { width:100%; height:100%; }
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      cursor: default;
+      background: #000;
+    }
+    .container {
+      text-align: center;
+      position: relative;
+      padding: 2rem;
+      transition: transform 0.3s ease;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+      /* hook our SVG filter */
+      filter: url(#displacementFilter);
+    }
+    .title, .coming-soon {
+      font-family: 'Lovelo Black', sans-serif;
+      transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+      transform-style: preserve-3d;
+    }
+    .title {
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: -2px;
+      margin-bottom: 2rem;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .title-logo {
+      position: absolute;
+      width: clamp(60px, 15vw, 120px);
+      height: clamp(60px, 15vw, 120px);
+      background: url('media/logo.png') center/contain no-repeat;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+      z-index: 2;
+    }
+    .coming-soon {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      color: #fff;
+      margin: 2rem 0;
+      display: inline-block;
+      /* animation: float 3s ease-in-out infinite; */  /* ← disabled */
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    .logo-trail {
+      position: absolute;
+      width: clamp(30px, 10vw, 60px);
+      height: clamp(30px, 10vw, 60px);
+      background: url('media/logo.png') center/contain no-repeat;
+      pointer-events: none;
+      opacity: 0;
+      animation: trailFloat 1.5s ease-out forwards;
+      mix-blend-mode: overlay;
+      z-index: 1;
+    }
+    /* @keyframes float {
+      0%,100% { transform: translateY(0) rotate(1deg); }
+      50%    { transform: translateY(-15px) rotate(-1deg); }
+    } */
+    @keyframes trailFloat {
+      0% {
+        opacity: 0.8;
+        transform: translate(-50%,-50%) scale(0.8);
+      }
+      100% {
+        opacity: 0;
+        transform:
+          translate(
+            calc(-50% + (var(--rand-x)*200px)),
+            calc(-50% + (var(--rand-y)*200px))
+          ) scale(2) rotate(360deg);
+        filter: hue-rotate(180deg);
+      }
+    }
+    @media (hover:none) {
+      body { cursor: pointer; }
+    }
+    .char-span {
+      display: inline-block;
+      transform-origin: center;
+      white-space: pre;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title-logo"></div>
-        <h1 class="title">Ficalindie Fest 2025</h1>
-        <div class="coming-soon">info (informazioni) soon (a breve)</div>
-    </div>
+  <!-- SVG displacement filter definition -->
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="displacementFilter" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0 0" numOctaves="1" result="turb"/>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
 
-    <script>
-        // Handle both mouse and touch events
-        function handleInteraction(e) {
-            const x = e.clientX || e.touches?.[0]?.clientX;
-            const y = e.clientY || e.touches?.[0]?.clientY;
+  <div class="container">
+    <div class="title-logo"></div>
+    <h1 class="title">Ficalindie Fest 2025</h1>
+    <div class="coming-soon">info (informazioni) soon (a breve)</div>
+  </div>
 
-            if (!x || !y) return;
+  <script>
+    // global cursor for gradient background
+    let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;
 
-            // Logo trail effect
-            if (Math.random() < 0.3) {
-                const trail = document.createElement('div');
-                trail.className = 'logo-trail';
+    // simple moving gradient
+    const color1 = "#7300b5", color2 = "#b57c00";
+    (function updateBG(){
+      const px = (mouseX/window.innerWidth)*100;
+      const py = (mouseY/window.innerHeight)*100;
+      document.body.style.background =
+        `radial-gradient(circle at ${px}% ${py}%, ${color1}, ${color2})`;
+      requestAnimationFrame(updateBG);
+    })();
 
-                const randX = (Math.random() - 0.5) * 2;
-                const randY = (Math.random() - 0.5) * 2;
-
-                trail.style.setProperty('--rand-x', randX);
-                trail.style.setProperty('--rand-y', randY);
-                trail.style.left = x + 'px';
-                trail.style.top = y + 'px';
-                trail.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
-
-                document.body.appendChild(trail);
-                setTimeout(() => trail.remove(), 1500);
-            }
-
-            // 3D tilt effect (without scaling)
-            const container = document.querySelector('.container');
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            const tiltX = (centerX - x) / 20;
-            const tiltY = (centerY - y) / 20;
-
-            container.style.transform = `
-                perspective(1000px)
-                rotateY(${tiltX}deg)
-                rotateX(${tiltY}deg)
-            `;
+    // wrap each letter to allow isolated transforms if needed later
+    function wrapCharacters(){
+      document.querySelectorAll('.title, .coming-soon').forEach(el=>{
+        const txt = el.textContent;
+        el.textContent = '';
+        for(let c of txt){
+          const span = document.createElement('span');
+          span.className = 'char-span';
+          span.textContent = c;
+          el.appendChild(span);
         }
+      });
+    }
 
-        // Event listeners for both desktop and mobile
-        document.addEventListener('mousemove', handleInteraction);
-        document.addEventListener('touchmove', handleInteraction, { passive: true });
+    // grab our SVG filter primitives
+    const turb = document.querySelector('feTurbulence');
+    const disp = document.querySelector('feDisplacementMap');
 
-        // Reset position on touch end
-        document.addEventListener('touchend', () => {
-            const container = document.querySelector('.container');
-            container.style.transform = 'perspective(1000px) rotateY(0) rotateX(0)';
-        });
-    </script>
+    // decay & mapping constants
+    const DECAY          = 0.99;  // slower decay (was 0.92)
+    const SCALE_FACTOR   = 60;    // match pointer-handler intensity
+    const FREQUENCY_MULT = 0.03;  // unchanged
+    const MIN_VELOCITY   = 0.0001;
+
+    let lastX = 0, lastY = 0, lastT = performance.now();
+    let velocity = 0;
+
+    // pointer move → update velocity & filter immediately
+    function handleInteraction(e){
+      const x = e.clientX ?? e.touches?.[0]?.clientX;
+      const y = e.clientY ?? e.touches?.[0]?.clientY;
+      if(x==null||y==null) return;
+
+      // update gradient target
+      mouseX = x; mouseY = y;
+
+      // logo trail
+      if(Math.random()<0.3){
+        const trail = document.createElement('div');
+        trail.className = 'logo-trail';
+        const rx = (Math.random()-0.5)*2, ry = (Math.random()-0.5)*2;
+        trail.style.setProperty('--rand-x', rx);
+        trail.style.setProperty('--rand-y', ry);
+        trail.style.left = x+'px';
+        trail.style.top  = y+'px';
+        trail.style.filter = `hue-rotate(${Math.random()*360}deg)`;
+        document.body.appendChild(trail);
+        setTimeout(() => trail.remove(), 1500);
+      }
+
+      // 3D tilt
+      const cx = innerWidth/2, cy = innerHeight/2;
+      const tiltY = (cx - x)/20, tiltX = (cy - y)/20;
+      document.querySelector('.container').style.transform =
+        `perspective(1000px) rotateY(${tiltY}deg) rotateX(${tiltX}deg)`;
+
+      // compute velocity
+      const now = performance.now();
+      const dx = x - lastX, dy = y - lastY;
+      const dt = Math.max(16, now - lastT);
+      velocity = Math.sqrt(dx*dx + dy*dy) / dt;
+      lastX = x; lastY = y; lastT = now;
+
+      // immediate filter update
+      if(velocity > MIN_VELOCITY){
+        const bf    = velocity * FREQUENCY_MULT;
+        const scale = velocity * SCALE_FACTOR;
+        turb.setAttribute('baseFrequency', `${bf} ${bf}`);
+        disp.setAttribute('scale', scale);
+      }
+    }
+
+    // gently decay warp back to zero each frame
+    function decayWarp(){
+      velocity *= DECAY;
+      if(velocity > MIN_VELOCITY){
+        const bf    = velocity * FREQUENCY_MULT;
+        const scale = velocity * SCALE_FACTOR;
+        turb.setAttribute('baseFrequency', `${bf} ${bf}`);
+        disp.setAttribute('scale', scale);
+      } else {
+        turb.setAttribute('baseFrequency', '0 0');
+        disp.setAttribute('scale', '0');
+      }
+      requestAnimationFrame(decayWarp);
+    }
+
+    document.addEventListener('mousemove', handleInteraction);
+    document.addEventListener('touchmove', handleInteraction, {passive:true});
+    document.addEventListener('touchend', () => {
+      document.querySelector('.container').style.transform =
+        'perspective(1000px) rotateY(0) rotateX(0)';
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      wrapCharacters();
+      decayWarp();
+    });
+  </script>
 </body>
 </html>
