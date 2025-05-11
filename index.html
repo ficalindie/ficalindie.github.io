@@ -31,10 +31,12 @@
       /* hook our SVG filter */
       filter: url(#displacementFilter);
     }
+
     .title, .coming-soon {
       font-family: 'Lovelo Black', sans-serif;
       transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
       transform-style: preserve-3d;
+      white-space: nowrap;
     }
     .title {
       font-size: clamp(2.5rem, 8vw, 4rem);
@@ -102,6 +104,51 @@
       transform-origin: center;
       white-space: pre;
     }
+    .social-links { display: flex; gap: 2rem; }
+    .social-link {
+      position: relative;
+      display: inline-block;
+      color: #fff;           /* monocolor for icons */
+      cursor: pointer;
+    }
+    .social-link .icon {
+      width: 40px;  /* Reduced from 60px */
+      height: 40px; /* Reduced from 60px */
+      fill: currentColor;
+      transition: transform 0.2s ease;
+      transform-origin: center center;
+      filter: url(#displacement);
+    }
+    /* Specific adjustment for Telegram logo */
+    .social-link[data-name="tg"] .icon {
+      width: 36px;  /* Slightly smaller width */
+      height: 36px; /* Slightly smaller height */
+      transform: translateY(2px); /* Adjust vertical positioning */
+    }
+    /* Inflation animation */
+    .inflating .icon {
+      animation: inflate 5s ease-in forwards;
+    }
+
+    @keyframes inflate {
+      0%   { transform: scale(1);  filter: url(#displacement) blur(0px); }
+      50%  { transform: scale(10);  filter: url(#displacement) blur(0px); }
+      100% { transform: scale(1); filter: url(#displacement) blur(0px); }
+    }
+
+    /* Confetti pieces */
+    .confetti {
+      position: absolute;
+      width: 6px; height: 6px;
+      background: red;
+      opacity: 0;
+      pointer-events: none;
+      animation: pop 1s ease-out forwards;
+    }
+    @keyframes pop {
+      0% { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.5); }
+    }
   </style>
 </head>
 <body>
@@ -119,7 +166,66 @@
     <div class="coming-soon">info (informazioni) soon (a breve)</div>
   </div>
 
+  <div class="social-links">
+    <!-- Instagram -->
+   <div class="social-link" data-name="insta">
+      <svg class="icon" viewBox="0 0 24 24" fill="#fff">
+        <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 1.5A4 4 0 0 0 3.5 7.5v9a4 4 0 0 0 4 4h9a4 4 0 0 0 4-4v-9a4 4 0 0 0-4-4h-9zM12 7a5 5 0 1 1 0 10a5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7zm5.25-1.75a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+      </svg>
+  </div>
+    <!-- Telegram -->
+    <div class="social-link" data-name="tg">
+<svg class="icon" viewBox="0 0 24 24">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.428.26l.213-3.05 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.86 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.57-4.458c.538-.196 1.006.128.832.941z"/>
+      </svg>
+    </div>
+  </div>
+
   <script>
+    document.querySelectorAll('.social-link').forEach(link => {
+      let inflateTimer;
+      link.addEventListener('mouseenter', () => {
+        // start inflation
+        link.classList.add('inflating');
+        inflateTimer = setTimeout(() => triggerPop(link), 5000);
+      });
+      link.addEventListener('mouseleave', () => {
+        clearTimeout(inflateTimer);
+        link.classList.remove('inflating');
+      });
+    });
+
+    function triggerPop(link) {
+      const icon = link.querySelector('.icon');
+      icon.style.display = 'none';
+      createConfetti(link);
+      setTimeout(() => {
+        // cleanup and reset
+        link.querySelectorAll('.confetti').forEach(node => node.remove());
+        icon.style.display = '';
+        link.classList.remove('inflating');
+      }, 1000);
+    }
+
+    function createConfetti(link) {
+      const rect = link.getBoundingClientRect();
+      for (let i = 0; i < 30; i++) {
+        const piece = document.createElement('div');
+        piece.classList.add('confetti');
+        const dx = (Math.random()-0.5)*200 + 'px';
+        const dy = (Math.random()-1)*200 + 'px';
+        const rot = Math.random()*720 + 'deg';
+        piece.style.setProperty('--dx', dx);
+        piece.style.setProperty('--dy', dy);
+        piece.style.setProperty('--rot', rot);
+        // random color
+        piece.style.background = `hsl(${Math.random()*360}, 70%, 60%)`;
+        // position at center of icon
+        piece.style.left = rect.width/2 + 'px';
+        piece.style.top  = rect.height/2 + 'px';
+        link.appendChild(piece);
+      }
+    }
     // global cursor for gradient background
     let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;
 
