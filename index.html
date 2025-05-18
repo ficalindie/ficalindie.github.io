@@ -144,18 +144,20 @@
       color: #fff;           /* monocolor for icons */
       cursor: pointer;
     }
-    .social-link .icon {
-      width: 40px;  /* Reduced from 60px */
-      height: 40px; /* Reduced from 60px */
+    .social-ling .icon {
       fill: currentColor;
       transition: transform 0.2s ease;
       transform-origin: center center;
       filter: url(#displacement);
     }
-    /* Specific adjustment for Telegram logo */
     .social-link[data-name="tg"] .icon {
-      width: 36px;  /* Slightly smaller width */
-      height: 36px; /* Slightly smaller height */
+      width: 40px;  /* Slightly smaller width */
+      height: 40px; /* Slightly smaller height */
+      transform: translateY(0px); /* Adjust vertical positioning */
+    }
+    .social-link[data-name="insta"] .icon {
+      width: 37px;  /* Slightly smaller width */
+      height: 37px; /* Slightly smaller height */
       transform: translateY(2px); /* Adjust vertical positioning */
     }
     /* Inflation animation */
@@ -208,14 +210,27 @@
   </div>
     <!-- Telegram -->
     <div class="social-link" data-name="tg">
+        <!-- Load svg from media/tg.svg -->
+        <img
+        class="icon"
+        src="media/tg.svg"/>
+      <!--
 <svg class="icon" viewBox="0 0 24 24">
         <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.428.26l.213-3.05 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.86 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.57-4.458c.538-.196 1.006.128.832.941z"/>
       </svg>
+      -->
     </div>
   </div>
 
   <script>
 
+    document.querySelector('.social-link[data-name="insta"]').addEventListener('click', () => {
+      window.location.href = 'https://instagram.com/ficalindie';
+    });
+
+    document.querySelector('.social-link[data-name="tg"]').addEventListener('click', () => {
+      window.location.href = 'https://t.me/ficalindiefest';
+    });
     document.querySelectorAll('.social-link').forEach(link => {
       let inflateTimer;
       link.addEventListener('mouseenter', () => {
