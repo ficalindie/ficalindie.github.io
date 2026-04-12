@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>FICALINDIE FEST</title>
-  <link rel="shortcut icon" type="image/x-icon" href="media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="media/icone/favicon.png">
   <style>
     @font-face {
       font-family: 'Lovelo Black';
@@ -25,7 +25,9 @@
     .container {
       text-align: center;
       position: relative;
-      padding: 2rem;
+      padding: 1rem;
+      max-width: 95%;
+      margin: 0 auto;
       transition: transform 0.3s ease;
       perspective: 1000px;
       transform-style: preserve-3d;
@@ -37,11 +39,12 @@
       transform-style: preserve-3d;
     }
     .title {
-      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-size: clamp(2rem, 6vw, 3.5rem);
       color: white;
       text-transform: uppercase;
       letter-spacing: -2px;
-      margin-bottom: 2rem;
+      line-height: 1.2;
+      margin-bottom: 1rem;
       text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
       position: relative;
     }
@@ -56,63 +59,23 @@
       filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
       z-index: 2;
     }
-    .coming-soon {
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
-      color: #fff;
-      margin: 2rem 0;
-      display: inline-block;
-      /* animation: float 3s ease-in-out infinite; */  /* ← disabled */
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+
+    @media (max-width: 480px) {
+      .container { padding: 0.5rem; }
+      .title { letter-spacing: -1px; }
     }
-
-    .container {
-    text-align: center;
-    position: relative;
-    padding: 1rem;
-    max-width: 95%;
-    margin: 0 auto;
-  }
-
-  .title {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    line-height: 1.2;
-    margin-bottom: 1rem;
-  }
-
-  .coming-soon {
-    font-size: clamp(1rem, 4vw, 2rem);
-    line-height: 1.3;
-    max-width: 90%;
-    margin: 1rem auto;
-  }
-
-  @media (max-width: 480px) {
-    .container {
-      padding: 0.5rem;
-    }
-    .title {
-      letter-spacing: -1px;
-    }
-  }
-
-
-
 
     .logo-trail {
       position: absolute;
       width: clamp(30px, 10vw, 60px);
       height: clamp(30px, 10vw, 60px);
-      background: url('media/logo.png') center/contain no-repeat;
+      background: url('media/icone/logo_ficalindie.png') center/contain no-repeat;
       pointer-events: none;
       opacity: 0;
       animation: trailFloat 1.5s ease-out forwards;
       mix-blend-mode: overlay;
       z-index: 1;
     }
-    /* @keyframes float {
-      0%,100% { transform: translateY(0) rotate(1deg); }
-      50%    { transform: translateY(-15px) rotate(-1deg); }
-    } */
     @keyframes trailFloat {
       0% {
         opacity: 0.8;
@@ -151,6 +114,7 @@
       margin-bottom: 0.6rem;
     }
     .social-link {
+      position: relative;
       display: inline-block;
       color: #fff;
       cursor: pointer;
@@ -161,6 +125,8 @@
       width: 32px;
       height: 32px;
       display: block;
+      transition: transform 0.3s ease;
+      transform-origin: center center;
     }
     .social-link svg.icon { fill: #fff; }
     .social-link img.icon { filter: invert(1); }
@@ -176,12 +142,12 @@
       color: #fff;
     }
     .seele-credit img {
-      width: 30px;
+      width: 39px;
       height: auto;
       filter: invert(1);
     }
 
-    /* Confetti pieces */
+    /* Nav button */
     .nav-button {
       display: inline-flex;
       flex-direction: column;
@@ -211,22 +177,89 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
 
+    /* Freaky Mode toggle */
+    .freaky-toggle {
+      position: fixed;
+      top: 1.2rem;
+      right: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-family: 'Lovelo Black', sans-serif;
+      color: #fff;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      z-index: 50;
+      user-select: none;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    .freaky-toggle input { display: none; }
+    .freaky-toggle .switch {
+      position: relative;
+      width: 46px; height: 24px;
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .freaky-toggle .switch::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    .freaky-toggle input:checked + .switch { background: #b57c00; }
+    .freaky-toggle input:checked + .switch::after { transform: translateX(22px); }
 
+    /* Social inflate animation (freaky mode) */
+    .social-link.inflating .icon {
+      animation: inflate 2s ease-in forwards;
+    }
+    @keyframes inflate {
+      0%   { transform: scale(1); }
+      80%  { transform: scale(2.5); }
+      100% { transform: scale(3); }
+    }
+
+    /* Confetti pieces */
+    .confetti {
+      position: absolute;
+      width: 6px; height: 6px;
+      background: red;
+      opacity: 0;
+      pointer-events: none;
+      animation: confettiPop 1s ease-out forwards;
+    }
+    @keyframes confettiPop {
+      0%   { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.5); }
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
+  <!-- SVG displacement filter for water ripple -->
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="displacementFilter" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0 0" numOctaves="1" result="turb"/>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <div class="container">
     <div class="title-logo"></div>
     <h1 class="title">FICALINDIE FEST</h1>
-    <a class="nav-button" href="edizioni.html">
-      <img src="media/pulsanti/button_poster.png" alt="Edizioni">
-      <span>EDIZIONI</span>
+    <a class="nav-button" href="museo.html">
+      <img src="media/pulsanti/button_poster.png" alt="Museo">
+      <span>MUSEO</span>
     </a>
   </div>
 
-
-<footer class="site-footer">
+  <footer class="site-footer">
     <div class="social-links">
       <a class="social-link" href="https://instagram.com/ficalindie" target="_blank" rel="noopener">
         <img class="icon" src="media/icone/logo_instagram_nero.png" alt="IG">
@@ -247,8 +280,232 @@
     </div>
   </footer>
 
+  <label class="freaky-toggle">
+    <span>FREAKY MODE</span>
+    <input type="checkbox" id="freakyToggle">
+    <span class="switch"></span>
+  </label>
+
   <script>
-    // Simple character wrapping for title
+    // ===== Freaky Mode =====
+    let freakyMode = false;
+    const freakyInput = document.getElementById('freakyToggle');
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    const color1 = '#7300b5', color2 = '#b57c00';
+    const containerEl = document.querySelector('.container');
+
+    // SVG filter refs for water ripple
+    const turb = document.querySelector('feTurbulence');
+    const disp = document.querySelector('feDisplacementMap');
+    const DECAY = 0.99, SCALE_FACTOR = 60, FREQUENCY_MULT = 0.03, MIN_VELOCITY = 0.0001;
+    let lastX = 0, lastY = 0, lastT = performance.now(), velocity = 0;
+
+    // ===== Audio (Web Audio API) =====
+    // ===== Audio (HTML Audio element) =====
+    const hoverAudio = new Audio('media/suoni/hover.flac');
+    hoverAudio.loop = true;
+    hoverAudio.volume = 0;
+    let soundPlaying = false;
+    let moveTimeout;
+    let fadeInterval;
+
+    function startHoverSound() {
+      if (soundPlaying) return;
+      soundPlaying = true;
+      clearInterval(fadeInterval);
+      hoverAudio.currentTime = 0;
+      hoverAudio.play().catch(() => {});
+      // Fade in
+      fadeInterval = setInterval(() => {
+        if (hoverAudio.volume < 0.45) {
+          hoverAudio.volume = Math.min(0.5, hoverAudio.volume + 0.05);
+        } else {
+          clearInterval(fadeInterval);
+        }
+      }, 20);
+    }
+
+    function fadeOutHoverSound() {
+      if (!soundPlaying) return;
+      clearInterval(fadeInterval);
+      // Fade out quickly
+      fadeInterval = setInterval(() => {
+        if (hoverAudio.volume > 0.05) {
+          hoverAudio.volume = Math.max(0, hoverAudio.volume - 0.05);
+        } else {
+          hoverAudio.volume = 0;
+          hoverAudio.pause();
+          soundPlaying = false;
+          clearInterval(fadeInterval);
+        }
+      }, 20);
+    }
+
+    function playPopSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.frequency.setValueAtTime(300, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.15);
+        g.gain.setValueAtTime(0.4, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.2);
+      } catch(e) {}
+    }
+
+    // ===== Toggle freaky mode =====
+    function setFreaky(on) {
+      freakyMode = on;
+      localStorage.setItem('freakyMode', on ? '1' : '0');
+      if (on) {
+        containerEl.style.filter = 'url(#displacementFilter)';
+      } else {
+        document.body.style.background = '#000';
+        containerEl.style.filter = '';
+        containerEl.style.transform = '';
+        turb.setAttribute('baseFrequency', '0 0');
+        disp.setAttribute('scale', '0');
+        velocity = 0;
+        fadeOutHoverSound();
+      }
+    }
+
+    freakyInput.addEventListener('change', e => setFreaky(e.target.checked));
+    if (localStorage.getItem('freakyMode') === '1') {
+      freakyInput.checked = true;
+      setFreaky(true);
+    }
+
+    // ===== Interaction handler =====
+    function handleInteraction(e) {
+      const x = e.clientX ?? e.touches?.[0]?.clientX;
+      const y = e.clientY ?? e.touches?.[0]?.clientY;
+      if (x == null || y == null) return;
+      mouseX = x; mouseY = y;
+      if (!freakyMode) return;
+
+      // Logo trail
+      if (Math.random() < 0.3) {
+        const trail = document.createElement('div');
+        trail.className = 'logo-trail';
+        trail.style.setProperty('--rand-x', (Math.random() - 0.5) * 2);
+        trail.style.setProperty('--rand-y', (Math.random() - 0.5) * 2);
+        trail.style.left = x + 'px';
+        trail.style.top = y + 'px';
+        trail.style.filter = 'hue-rotate(' + (Math.random() * 360) + 'deg)';
+        document.body.appendChild(trail);
+        setTimeout(() => trail.remove(), 1500);
+      }
+
+      // 3D tilt
+      const cx = innerWidth / 2, cy = innerHeight / 2;
+      const tiltY = (cx - x) / 20, tiltX = (cy - y) / 20;
+      containerEl.style.transform =
+        'perspective(1000px) rotateY(' + tiltY + 'deg) rotateX(' + tiltX + 'deg)';
+
+      // Velocity for water ripple
+      const now = performance.now();
+      const dx = x - lastX, dy = y - lastY;
+      const dt = Math.max(16, now - lastT);
+      velocity = Math.sqrt(dx * dx + dy * dy) / dt;
+      lastX = x; lastY = y; lastT = now;
+
+      if (velocity > MIN_VELOCITY) {
+        const bf = velocity * FREQUENCY_MULT;
+        const scale = velocity * SCALE_FACTOR;
+        turb.setAttribute('baseFrequency', bf + ' ' + bf);
+        disp.setAttribute('scale', scale);
+      }
+
+      // Hover sound
+      startHoverSound();
+      clearTimeout(moveTimeout);
+      moveTimeout = setTimeout(fadeOutHoverSound, 200);
+    }
+
+    document.addEventListener('mousemove', handleInteraction);
+    document.addEventListener('touchmove', handleInteraction, { passive: true });
+    document.addEventListener('touchend', () => {
+      containerEl.style.transform = 'perspective(1000px) rotateY(0) rotateX(0)';
+    });
+
+    // ===== Animation loop: ripple decay + background gradient =====
+    (function animLoop() {
+      if (freakyMode) {
+        // Decay ripple
+        velocity *= DECAY;
+        if (velocity > MIN_VELOCITY) {
+          const bf = velocity * FREQUENCY_MULT;
+          const scale = velocity * SCALE_FACTOR;
+          turb.setAttribute('baseFrequency', bf + ' ' + bf);
+          disp.setAttribute('scale', scale);
+        } else {
+          turb.setAttribute('baseFrequency', '0 0');
+          disp.setAttribute('scale', '0');
+        }
+        // Background gradient
+        const px = (mouseX / window.innerWidth) * 100;
+        const py = (mouseY / window.innerHeight) * 100;
+        document.body.style.background =
+          'radial-gradient(circle at ' + px + '% ' + py + '%, ' + color1 + ', ' + color2 + ')';
+      }
+      requestAnimationFrame(animLoop);
+    })();
+
+    // ===== Social icon inflate/pop (freaky mode) =====
+    document.querySelectorAll('.social-link').forEach(link => {
+      let inflateTimer;
+
+      function startInflate() {
+        if (!freakyMode) return;
+        link.classList.add('inflating');
+        inflateTimer = setTimeout(() => triggerPop(link), 2000);
+      }
+      function cancelInflate() {
+        clearTimeout(inflateTimer);
+        link.classList.remove('inflating');
+        const icon = link.querySelector('.icon');
+        if (icon) icon.style.transform = '';
+      }
+
+      link.addEventListener('mouseenter', startInflate);
+      link.addEventListener('mouseleave', cancelInflate);
+      link.addEventListener('touchstart', startInflate, { passive: true });
+      link.addEventListener('touchend', cancelInflate);
+    });
+
+    function triggerPop(link) {
+      const icon = link.querySelector('.icon');
+      icon.style.display = 'none';
+      playPopSound();
+      createConfetti(link);
+      setTimeout(() => {
+        link.querySelectorAll('.confetti').forEach(node => node.remove());
+        icon.style.display = '';
+        icon.style.transform = '';
+        link.classList.remove('inflating');
+      }, 1000);
+    }
+
+    function createConfetti(link) {
+      for (let i = 0; i < 30; i++) {
+        const piece = document.createElement('div');
+        piece.classList.add('confetti');
+        piece.style.setProperty('--dx', (Math.random() - 0.5) * 200 + 'px');
+        piece.style.setProperty('--dy', (Math.random() - 1) * 200 + 'px');
+        piece.style.setProperty('--rot', Math.random() * 720 + 'deg');
+        piece.style.background = 'hsl(' + (Math.random() * 360) + ', 70%, 60%)';
+        piece.style.left = '50%';
+        piece.style.top = '50%';
+        link.appendChild(piece);
+      }
+    }
+
+    // ===== Character wrapping for title =====
     document.querySelectorAll('.title').forEach(el => {
       const txt = el.textContent;
       el.textContent = '';
