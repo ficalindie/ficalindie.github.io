@@ -215,6 +215,48 @@
     .freaky-toggle input:checked + .switch { background: #b57c00; }
     .freaky-toggle input:checked + .switch::after { transform: translateX(22px); }
 
+    /* ===== CITTU toggle ===== */
+    .cittu-toggle {
+      position: fixed;
+      top: 3rem;
+      right: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-family: 'Lovelo Black', sans-serif;
+      color: #fff;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      z-index: 50;
+      user-select: none;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .cittu-toggle.visible { opacity: 1; pointer-events: auto; }
+    .cittu-toggle input { display: none; }
+    .cittu-toggle .switch {
+      position: relative;
+      width: 46px; height: 24px;
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .cittu-toggle .switch::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    .cittu-toggle input:checked + .switch { background: #b57c00; }
+    .cittu-toggle input:checked + .switch::after { transform: translateX(22px); }
+
     /* Social inflate animation (freaky mode) */
     .social-link.inflating .icon {
       animation: inflate 2s ease-in forwards;
@@ -283,6 +325,12 @@
   <label class="freaky-toggle">
     <span>FREAKY MODE</span>
     <input type="checkbox" id="freakyToggle">
+    <span class="switch"></span>
+  </label>
+
+  <label class="cittu-toggle" id="cittuToggle">
+    <span>CITTU</span>
+    <input type="checkbox" id="cittuInput">
     <span class="switch"></span>
   </label>
 
@@ -357,12 +405,27 @@
       } catch(e) {}
     }
 
+    // ===== CITTU toggle =====
+    let cittuMode = false;
+    const cittuToggle = document.getElementById('cittuToggle');
+    const cittuInput = document.getElementById('cittuInput');
+
+    function setCittu(on) {
+      cittuMode = on;
+      localStorage.setItem('cittuMode', on ? '1' : '0');
+      if (on) {
+        fadeOutHoverSound();
+      }
+    }
+    cittuInput.addEventListener('change', e => setCittu(e.target.checked));
+
     // ===== Toggle freaky mode =====
     function setFreaky(on) {
       freakyMode = on;
       localStorage.setItem('freakyMode', on ? '1' : '0');
       if (on) {
         containerEl.style.filter = 'url(#displacementFilter)';
+        cittuToggle.classList.add('visible');
       } else {
         document.body.style.background = '#000';
         containerEl.style.filter = '';
@@ -370,6 +433,10 @@
         turb.setAttribute('baseFrequency', '0 0');
         disp.setAttribute('scale', '0');
         velocity = 0;
+        cittuToggle.classList.remove('visible');
+        cittuInput.checked = false;
+        cittuMode = false;
+        localStorage.setItem('cittuMode', '0');
         fadeOutHoverSound();
       }
     }
@@ -378,6 +445,10 @@
     if (localStorage.getItem('freakyMode') === '1') {
       freakyInput.checked = true;
       setFreaky(true);
+      if (localStorage.getItem('cittuMode') === '1') {
+        cittuInput.checked = true;
+        cittuMode = true;
+      }
     }
 
     // ===== Interaction handler =====
@@ -422,9 +493,11 @@
       }
 
       // Hover sound
-      startHoverSound();
-      clearTimeout(moveTimeout);
-      moveTimeout = setTimeout(fadeOutHoverSound, 200);
+      if (!cittuMode) {
+        startHoverSound();
+        clearTimeout(moveTimeout);
+        moveTimeout = setTimeout(fadeOutHoverSound, 200);
+      }
     }
 
     document.addEventListener('mousemove', handleInteraction);

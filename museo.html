@@ -39,8 +39,6 @@
       top: 0;
       z-index: 10;
       padding: 1.2rem 1.5rem;
-      backdrop-filter: blur(8px);
-      background: rgba(0,0,0,0.25);
     }
     .back-link {
       display: inline-block;
@@ -58,10 +56,11 @@
       top: 3.5rem;
       z-index: 9;
       padding: 2.5rem 1rem 1rem;
-      background: #000;
+      pointer-events: none;
     }
-    body.freaky-on .museo-hero {
-      background: transparent;
+    .museo-hero .museo-logo,
+    .museo-hero .museo-title {
+      pointer-events: auto;
     }
     .museo-logo {
       position: absolute;
@@ -275,6 +274,15 @@
     .artist-links .spotify-icon img,
     .artist-links .soundcloud-icon img,
     .artist-links .mixcloud-icon img { filter: none; }
+
+    .description .desc-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+      margin-left: 2px;
+      filter: invert(1);
+    }
     .artist-double {
       flex-wrap: wrap;
     }
@@ -423,6 +431,48 @@
     .freaky-toggle input:checked + .switch { background: #b57c00; }
     .freaky-toggle input:checked + .switch::after { transform: translateX(22px); }
 
+    /* ===== CITTU toggle ===== */
+    .cittu-toggle {
+      position: fixed;
+      top: 3rem;
+      right: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-family: 'Lovelo Black', sans-serif;
+      color: #fff;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      z-index: 50;
+      user-select: none;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .cittu-toggle.visible { opacity: 1; pointer-events: auto; }
+    .cittu-toggle input { display: none; }
+    .cittu-toggle .switch {
+      position: relative;
+      width: 46px; height: 24px;
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .cittu-toggle .switch::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    .cittu-toggle input:checked + .switch { background: #b57c00; }
+    .cittu-toggle input:checked + .switch::after { transform: translateX(22px); }
+
     /* ===== Footer ===== */
     .site-footer {
       text-align: center;
@@ -496,8 +546,8 @@
             <figure><img src="media/locandine/2019/2019_3.jpg" alt="2019 locandina 3"></figure>
           </div>
           <div class="year-info">
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            <div class="artists-title">ARTISTI</div>
+            <p class="description">La nostra prima volta, in una campagna di Nardò: Salento420 w/ La Comune & Spadello Bello.</p>
+            <div class="artists-title">MUSICA</div>
             <div class="artists-list">
               <div class="artist"><span class="artist-name">MarVin</span><div class="artist-links"><a href="https://www.instagram.com/_cenzo_/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://soundcloud.com/user-189800668" target="_blank" class="soundcloud-icon"><img src="media/icone/logo_soundcloud_bianco.png" alt="Soundcloud"></a></div></div>
             </div>
@@ -525,8 +575,8 @@
             <figure><img src="media/locandine/2022/2022_3.png" alt="2022 locandina 3"></figure>
           </div>
           <div class="year-info">
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            <div class="artists-title">ARTISTI</div>
+            <p class="description">Il COVID è finito, ora tutto tornerà alla normalità 🙂</p>
+            <div class="artists-title">MUSICA</div>
             <div class="artists-list">
               <div class="artist"><span class="artist-name">Federico Sergi</span><div class="artist-links"><a href="https://www.instagram.com/sergiifede/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
               <div class="artist artist-double"><span class="artist-name">Kamaji</span><div class="artist-links"><a href="https://www.instagram.com/kamaji.rar/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/1YeEv5YkSiIamIsmjnnBnS" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div><span class="artist-separator">X</span><span class="artist-name">Claudia Giannotta</span><div class="artist-links"><a href="https://www.instagram.com/giannottaclaudia/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
@@ -556,14 +606,18 @@
             <figure><img src="media/locandine/2023/2023_3.png" alt="2023 locandina 3"></figure>
           </div>
           <div class="year-info">
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            <div class="artists-title">ARTISTI</div>
+            <p class="description">Con [tanti] amici.</p>
+            <div class="artists-title">MUSICA</div>
             <div class="artists-list">
               <div class="artist"><span class="artist-name">Federico Sergi</span><div class="artist-links"><a href="https://www.instagram.com/sergiifede/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
               <div class="artist"><span class="artist-name">June on the Moon</span><div class="artist-links"><a href="https://www.instagram.com/juneonthemoonmusic/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/4D7fnI4k0SwiiH1v9u6l1j" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
               <div class="artist"><span class="artist-name">Stain</span><div class="artist-links"><a href="https://www.instagram.com/stain___band/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/0NJHyLdeQpxPdGIUt29IMv" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
               <div class="artist"><span class="artist-name">Mawingo</span><div class="artist-links"><a href="https://www.instagram.com/mawingoknows/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/4xFoAwRQZvExcfCuJaOvtj" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
               <div class="artist"><span class="artist-name">Max Nocco</span><div class="artist-links"><a href="https://www.instagram.com/maxnocco/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/6sJByrrthqd8PGzuRECnlh" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
+            </div>
+            <div class="artists-title">ARTWORKS</div>
+            <div class="artists-list">
+              <div class="artist"><span class="artist-name">ved.fourdimensional</span><div class="artist-links"><a href="https://www.instagram.com/ved.fourdimensional/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
             </div>
           </div>
         </div>
@@ -589,13 +643,18 @@
             <figure><video src="media/locandine/2024/2024_3.mp4" muted loop playsinline autoplay></video></figure>
           </div>
           <div class="year-info">
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            <div class="artists-title">ARTISTI</div>
+            <p class="description"><a href="https://geocities.restorativland.org/">INTERNET</a> come mezzo di espressione.</p>
+            <div class="artists-title">MUSICA</div>
             <div class="artists-list">
               <div class="artist"><span class="artist-name">Riccardo Tommasi</span><div class="artist-links"><a href="https://www.instagram.com/taotommasi/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
               <div class="artist"><span class="artist-name">Albis Umbra</span><div class="artist-links"><a href="https://www.instagram.com/albisumbra/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/4DKqR4Ijuqd6fTN292MLBF" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
               <div class="artist"><span class="artist-name">Planet Opal</span><div class="artist-links"><a href="https://www.instagram.com/planet.opal/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/79u3gvhlSLQxzZNqn0voXp" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
               <div class="artist"><span class="artist-name">Stefano Polimeno</span><div class="artist-links"><a href="https://www.instagram.com/stepolimeno/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://soundcloud.com/stefanopolimeno" target="_blank" class="soundcloud-icon"><img src="media/icone/logo_soundcloud_bianco.png" alt="Soundcloud"></a></div></div>
+            </div>
+            <div class="artists-title">ARTWORKS</div>
+            <div class="artists-list">
+              <div class="artist"><span class="artist-name">Terr*ni</span><div class="artist-links"><a href="https://www.instagram.com/terr__ni/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
+              <div class="artist"><span class="artist-name">4rtif1cial</span><div class="artist-links"><a href="https://www.instagram.com/4rtif1cial/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
             </div>
           </div>
         </div>
@@ -621,17 +680,23 @@
             <figure><img src="media/locandine/2025/2025_3.png" alt="2025 locandina 3"></figure>
           </div>
           <div class="year-info">
-            <div class="artists-title">ARTISTI - BETA</div>
+            <p class="description">Primo doppio Ficalindie Fest.</p>
+            <div class="artists-title">MUSICA - BETA</div>
             <div class="artists-list">
               <div class="artist"><span class="artist-name">Pallida Cavtat</span><div class="artist-links"><a href="https://www.instagram.com/pallidacavtat/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/0TjLwWcYmohY41tBvykTAa" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
               <div class="artist"><span class="artist-name">DuVai</span><div class="artist-links"><a href="https://www.instagram.com/duvai.official/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
               <div class="artist"><span class="artist-name">Ælis</span><div class="artist-links"><a href="https://www.instagram.com/aelis.ita/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://www.mixcloud.com/aelismusic/" target="_blank" class="mixcloud-icon"><img src="media/icone/logo_mixcloud_bianco.png" alt="Spotify"></a></div></div>
             </div>
-            <div class="artists-title">ARTISTI - STABLE</div>
+            <div class="artists-title">MUSICA - STABLE</div>
             <div class="artists-list">
               <div class="artist artist-double"><span class="artist-name">Cartografia</span><div class="artist-links"><a href="https://www.instagram.com/cartografiaa/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/57xfHKmwKVTXZiVmKMI7Wt" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div><span class="artist-separator">+</span><span class="artist-name">Piccola Illusione</span><div class="artist-links"><a href="https://www.instagram.com/piccola_illusione/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/1Xh7qSWURzwG0gIzmrCKy4" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
               <div class="artist"><span class="artist-name">Cucina Sonora</span><div class="artist-links"><a href="https://www.instagram.com/cucinasonora/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://open.spotify.com/artist/0t4vNX1iyHzmASWTnsYzES" target="_blank" class="spotify-icon"><img src="media/icone/logo_spotify_bianco.png" alt="Spotify"></a></div></div>
               <div class="artist"><span class="artist-name">giacomo.mp3</span><div class="artist-links"><a href="https://www.instagram.com/giacomo.mp3/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a><a href="https://soundcloud.com/giacomo-fontana-3" target="_blank" class="soundcloud-icon"><img src="media/icone/logo_soundcloud_bianco.png" alt="Soundcloud"></a></div></div>
+            </div>
+            <div class="artists-title">ARTWORKS</div>
+            <div class="artists-list">
+              <div class="artist"><span class="artist-name">Francesca Notaro</span><div class="artist-links"><a href="https://www.instagram.com/francescanotaro_/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
+              <div class="artist"><span class="artist-name">4rtif1cial</span><div class="artist-links"><a href="https://www.instagram.com/4rtif1cial/" target="_blank"><img src="media/icone/logo_instagram_nero.png" alt="IG"></a></div></div>
             </div>
           </div>
         </div>
@@ -667,6 +732,12 @@
     <span class="switch"></span>
   </label>
 
+  <label class="cittu-toggle" id="cittuToggle">
+    <span>CITTU</span>
+    <input type="checkbox" id="cittuInput">
+    <span class="switch"></span>
+  </label>
+
   <div class="lightbox" id="lightbox">
     <button class="lightbox__close" aria-label="Close">&times;</button>
     <div class="lightbox__content"></div>
@@ -688,23 +759,6 @@
       '2024': ['#1a1a1a', '#d4d4d4'],
       '2025': ['#F937A3', '#0BDA92']//['#2d1b69', '#1b4332']
     };
-
-    function setFreaky(on) {
-      freakyMode = on;
-      localStorage.setItem('freakyMode', on ? '1' : '0');
-      if (on) {
-        document.body.classList.add('freaky-on');
-      } else {
-        document.body.classList.remove('freaky-on');
-        document.body.style.background = '#000';
-        fadeOutHoverSound();
-      }
-    }
-    freakyInput.addEventListener('change', e => setFreaky(e.target.checked));
-    if (localStorage.getItem('freakyMode') === '1') {
-      freakyInput.checked = true;
-      setFreaky(true);
-    }
 
     // ===== Audio (hover sound for freaky mode) =====
     const hoverAudio = new Audio('media/suoni/hover.flac');
@@ -744,9 +798,49 @@
       }, 20);
     }
 
+    // ===== CITTU toggle =====
+    let cittuMode = false;
+    const cittuToggle = document.getElementById('cittuToggle');
+    const cittuInput = document.getElementById('cittuInput');
+
+    function setCittu(on) {
+      cittuMode = on;
+      localStorage.setItem('cittuMode', on ? '1' : '0');
+      if (on) {
+        fadeOutHoverSound();
+      }
+    }
+    cittuInput.addEventListener('change', e => setCittu(e.target.checked));
+
+    function setFreaky(on) {
+      freakyMode = on;
+      localStorage.setItem('freakyMode', on ? '1' : '0');
+      if (on) {
+        document.body.classList.add('freaky-on');
+        cittuToggle.classList.add('visible');
+      } else {
+        document.body.classList.remove('freaky-on');
+        document.body.style.background = '#000';
+        cittuToggle.classList.remove('visible');
+        cittuInput.checked = false;
+        cittuMode = false;
+        localStorage.setItem('cittuMode', '0');
+        fadeOutHoverSound();
+      }
+    }
+    freakyInput.addEventListener('change', e => setFreaky(e.target.checked));
+    if (localStorage.getItem('freakyMode') === '1') {
+      freakyInput.checked = true;
+      setFreaky(true);
+      if (localStorage.getItem('cittuMode') === '1') {
+        cittuInput.checked = true;
+        cittuMode = true;
+      }
+    }
+
     document.addEventListener('mousemove', e => {
       mouseX = e.clientX; mouseY = e.clientY;
-      if (freakyMode) {
+      if (freakyMode && !cittuMode) {
         startHoverSound();
         clearTimeout(moveTimeout);
         moveTimeout = setTimeout(fadeOutHoverSound, 200);
@@ -755,7 +849,7 @@
     document.addEventListener('touchmove', e => {
       mouseX = e.touches[0].clientX;
       mouseY = e.touches[0].clientY;
-      if (freakyMode) {
+      if (freakyMode && !cittuMode) {
         startHoverSound();
         clearTimeout(moveTimeout);
         moveTimeout = setTimeout(fadeOutHoverSound, 200);
