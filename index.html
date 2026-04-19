@@ -348,22 +348,30 @@
     const DECAY = 0.99, SCALE_FACTOR = 60, FREQUENCY_MULT = 0.03, MIN_VELOCITY = 0.0001;
     let lastX = 0, lastY = 0, lastT = performance.now(), velocity = 0;
 
-    // ===== Audio (Web Audio API) =====
-    // ===== Audio (HTML Audio element) =====
+    // ===== Audio =====
     const hoverAudio = new Audio('media/suoni/hover.flac');
     hoverAudio.loop = true;
     hoverAudio.volume = 0;
+    hoverAudio.muted = true;
+    hoverAudio.preload = 'auto';
     let soundPlaying = false;
     let moveTimeout;
     let fadeInterval;
+
+    // Muted play is always allowed by browsers — starts the audio loop silently
+    function ensureAudioRunning() {
+      if (!hoverAudio.paused) return;
+      hoverAudio.muted = true;
+      hoverAudio.volume = 0;
+      hoverAudio.play().catch(() => {});
+    }
 
     function startHoverSound() {
       if (soundPlaying) return;
       soundPlaying = true;
       clearInterval(fadeInterval);
-      hoverAudio.currentTime = 0;
-      hoverAudio.play().catch(() => {});
-      // Fade in
+      hoverAudio.muted = false;
+      ensureAudioRunning();
       fadeInterval = setInterval(() => {
         if (hoverAudio.volume < 0.45) {
           hoverAudio.volume = Math.min(0.5, hoverAudio.volume + 0.05);
@@ -376,13 +384,12 @@
     function fadeOutHoverSound() {
       if (!soundPlaying) return;
       clearInterval(fadeInterval);
-      // Fade out quickly
       fadeInterval = setInterval(() => {
         if (hoverAudio.volume > 0.05) {
           hoverAudio.volume = Math.max(0, hoverAudio.volume - 0.05);
         } else {
           hoverAudio.volume = 0;
-          hoverAudio.pause();
+          hoverAudio.muted = true;
           soundPlaying = false;
           clearInterval(fadeInterval);
         }
@@ -426,6 +433,7 @@
       if (on) {
         containerEl.style.filter = 'url(#displacementFilter)';
         cittuToggle.classList.add('visible');
+        ensureAudioRunning();
       } else {
         document.body.style.background = '#000';
         containerEl.style.filter = '';
@@ -437,7 +445,11 @@
         cittuInput.checked = false;
         cittuMode = false;
         localStorage.setItem('cittuMode', '0');
-        fadeOutHoverSound();
+        clearInterval(fadeInterval);
+        hoverAudio.muted = true;
+        hoverAudio.volume = 0;
+        hoverAudio.pause();
+        soundPlaying = false;
       }
     }
 

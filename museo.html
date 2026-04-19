@@ -138,9 +138,11 @@
     }
     .year-label .char {
       display: inline-block;
-      transform-origin: center bottom;
+      transform-origin: center center;
       transition: transform 0.15s ease-out;
     }
+    .effect-rubber .char { transition: none; will-change: transform; }
+    .effect-spin .char { transition: none; will-change: transform; }
     .year-subtitle {
       display: none;
       font-size: clamp(0.9rem, 2.5vw, 1.5rem);
@@ -329,24 +331,17 @@
 
     /* ===== Hover effects (only active when freaky mode is on) ===== */
 
-    /* 2019 — spin (digits rotate on themselves) */
-    .effect-spin { perspective: 200px; }
-    body.freaky-on .effect-spin:hover {
+    /* 2019 — spin (pointer-driven, JS) */
+    .effect-spin { perspective: 600px; }
+    body.freaky-on .effect-spin:hover,
+    body.freaky-on .effect-spin.is-touched {
       border-color: rgba(255,255,255,0.6);
     }
-    body.freaky-on .effect-spin:hover .char {
-      animation: digitSpin 0.6s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 100ms);
-      will-change: transform;
-    }
-    @keyframes digitSpin {
-      0%   { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
-    }
 
-    /* 2022 — rubber (JS-driven, no CSS animation) */
+    /* 2022 — rubber (JS-driven spring, no CSS animation) */
     .effect-rubber { cursor: default; }
-    body.freaky-on .effect-rubber:hover { border-color: rgba(255,255,255,0.5); }
+    body.freaky-on .effect-rubber:hover,
+    body.freaky-on .effect-rubber.is-touched { border-color: rgba(255,255,255,0.5); }
 
     /* 2023 — rainbow (gradient covers border via box-shadow) */
     .effect-rainbow {
@@ -357,10 +352,11 @@
               background-clip: text;
       transition: color 0.2s ease;
     }
-    body.freaky-on .effect-rainbow:hover {
+    body.freaky-on .effect-rainbow:hover,
+    body.freaky-on .effect-rainbow.is-touched {
       color: transparent;
       border-color: transparent;
-      animation: rainbowSlide 0.67s linear infinite, rainbowBorder 0.67s linear infinite;
+      animation: rainbowSlide 0.9s linear infinite, rainbowBorder 0.9s linear infinite;
     }
     @keyframes rainbowSlide {
       0%   { background-position: 0% 0%; }
@@ -383,15 +379,19 @@
     .year[data-year="2025"] .year-label { font-family: 'Montagu Slab', serif; font-weight: 700; }
 
     /* 2024 — BW alternating */
-    body.freaky-on .effect-bw:hover { border-color: #fff; }
-    body.freaky-on .effect-bw:hover .char:nth-child(odd) { animation: bwOdd 0.2s steps(1, end) infinite; }
-    body.freaky-on .effect-bw:hover .char:nth-child(even) { animation: bwEven 0.2s steps(1, end) infinite; }
+    body.freaky-on .effect-bw:hover,
+    body.freaky-on .effect-bw.is-touched { border-color: #fff; }
+    body.freaky-on .effect-bw:hover .char:nth-child(odd),
+    body.freaky-on .effect-bw.is-touched .char:nth-child(odd) { animation: bwOdd 0.2s steps(1, end) infinite; }
+    body.freaky-on .effect-bw:hover .char:nth-child(even),
+    body.freaky-on .effect-bw.is-touched .char:nth-child(even) { animation: bwEven 0.2s steps(1, end) infinite; }
     @keyframes bwOdd  { 0%, 49% { color: #fff; } 50%, 100% { color: #000; } }
     @keyframes bwEven { 0%, 49% { color: #000; } 50%, 100% { color: #fff; } }
 
     /* 2025 — transparency */
     .effect-transparent { transition: opacity 0.2s ease, border-color 0.2s ease; }
-    body.freaky-on .effect-transparent:hover { opacity: 0.15; }
+    body.freaky-on .effect-transparent:hover,
+    body.freaky-on .effect-transparent.is-touched { opacity: 0.15; }
 
     /* ===== Freaky Mode toggle ===== */
     .freaky-toggle {
@@ -430,48 +430,6 @@
     }
     .freaky-toggle input:checked + .switch { background: #b57c00; }
     .freaky-toggle input:checked + .switch::after { transform: translateX(22px); }
-
-    /* ===== CITTU toggle ===== */
-    .cittu-toggle {
-      position: fixed;
-      top: 3rem;
-      right: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-family: 'Lovelo Black', sans-serif;
-      color: #fff;
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      z-index: 50;
-      user-select: none;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .cittu-toggle.visible { opacity: 1; pointer-events: auto; }
-    .cittu-toggle input { display: none; }
-    .cittu-toggle .switch {
-      position: relative;
-      width: 46px; height: 24px;
-      background: rgba(255,255,255,0.25);
-      border: 1px solid rgba(255,255,255,0.5);
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .cittu-toggle .switch::after {
-      content: '';
-      position: absolute;
-      top: 2px; left: 2px;
-      width: 18px; height: 18px;
-      background: #fff;
-      border-radius: 50%;
-      transition: transform 0.3s ease;
-    }
-    .cittu-toggle input:checked + .switch { background: #b57c00; }
-    .cittu-toggle input:checked + .switch::after { transform: translateX(22px); }
 
     /* ===== Footer ===== */
     .site-footer {
@@ -733,12 +691,6 @@
     <span class="switch"></span>
   </label>
 
-  <label class="cittu-toggle" id="cittuToggle">
-    <span>CITTU</span>
-    <input type="checkbox" id="cittuInput">
-    <span class="switch"></span>
-  </label>
-
   <div class="lightbox" id="lightbox">
     <button class="lightbox__close" aria-label="Close">&times;</button>
     <div class="lightbox__content"></div>
@@ -761,100 +713,28 @@
       '2025': ['#F937A3', '#0BDA92']//['#2d1b69', '#1b4332']
     };
 
-    // ===== Audio (hover sound for freaky mode) =====
-    const hoverAudio = new Audio('media/suoni/hover.flac');
-    hoverAudio.loop = true;
-    hoverAudio.volume = 0;
-    let soundPlaying = false;
-    let moveTimeout;
-    let fadeInterval;
-
-    function startHoverSound() {
-      if (soundPlaying) return;
-      soundPlaying = true;
-      clearInterval(fadeInterval);
-      hoverAudio.currentTime = 0;
-      hoverAudio.play().catch(() => {});
-      fadeInterval = setInterval(() => {
-        if (hoverAudio.volume < 0.45) {
-          hoverAudio.volume = Math.min(0.5, hoverAudio.volume + 0.05);
-        } else {
-          clearInterval(fadeInterval);
-        }
-      }, 20);
-    }
-
-    function fadeOutHoverSound() {
-      if (!soundPlaying) return;
-      clearInterval(fadeInterval);
-      fadeInterval = setInterval(() => {
-        if (hoverAudio.volume > 0.05) {
-          hoverAudio.volume = Math.max(0, hoverAudio.volume - 0.05);
-        } else {
-          hoverAudio.volume = 0;
-          hoverAudio.pause();
-          soundPlaying = false;
-          clearInterval(fadeInterval);
-        }
-      }, 20);
-    }
-
-    // ===== CITTU toggle =====
-    let cittuMode = false;
-    const cittuToggle = document.getElementById('cittuToggle');
-    const cittuInput = document.getElementById('cittuInput');
-
-    function setCittu(on) {
-      cittuMode = on;
-      localStorage.setItem('cittuMode', on ? '1' : '0');
-      if (on) {
-        fadeOutHoverSound();
-      }
-    }
-    cittuInput.addEventListener('change', e => setCittu(e.target.checked));
-
     function setFreaky(on) {
       freakyMode = on;
       localStorage.setItem('freakyMode', on ? '1' : '0');
       if (on) {
         document.body.classList.add('freaky-on');
-        cittuToggle.classList.add('visible');
       } else {
         document.body.classList.remove('freaky-on');
         document.body.style.background = '#000';
-        cittuToggle.classList.remove('visible');
-        cittuInput.checked = false;
-        cittuMode = false;
-        localStorage.setItem('cittuMode', '0');
-        fadeOutHoverSound();
       }
     }
     freakyInput.addEventListener('change', e => setFreaky(e.target.checked));
     if (localStorage.getItem('freakyMode') === '1') {
       freakyInput.checked = true;
       setFreaky(true);
-      if (localStorage.getItem('cittuMode') === '1') {
-        cittuInput.checked = true;
-        cittuMode = true;
-      }
     }
 
     document.addEventListener('mousemove', e => {
       mouseX = e.clientX; mouseY = e.clientY;
-      if (freakyMode && !cittuMode) {
-        startHoverSound();
-        clearTimeout(moveTimeout);
-        moveTimeout = setTimeout(fadeOutHoverSound, 200);
-      }
     });
     document.addEventListener('touchmove', e => {
       mouseX = e.touches[0].clientX;
       mouseY = e.touches[0].clientY;
-      if (freakyMode && !cittuMode) {
-        startHoverSound();
-        clearTimeout(moveTimeout);
-        moveTimeout = setTimeout(fadeOutHoverSound, 200);
-      }
     }, { passive: true });
 
     (function updateBG() {
@@ -880,46 +760,167 @@
       });
     });
 
-    // ===== 2022 rubber mouse-follow effect =====
-    document.querySelectorAll('.effect-rubber').forEach(label => {
+    // ===== Generic touch-hover for all year labels =====
+    document.querySelectorAll('.year-label').forEach(label => {
+      const addTouched = () => label.classList.add('is-touched');
+      const removeTouched = () => label.classList.remove('is-touched');
+      label.addEventListener('touchstart', addTouched, { passive: true });
+      label.addEventListener('touchend', removeTouched);
+      label.addEventListener('touchcancel', removeTouched);
+    });
+
+    // ===== 2019 proximity-driven spin =====
+    // Each char spins continuously; its spin SPEED is modulated by how close
+    // the pointer's x is to that char. Pointer on "2" → "2" spins fast, "0" a bit.
+    document.querySelectorAll('.effect-spin').forEach(label => {
       const chars = [...label.querySelectorAll('.char')];
+      const charStates = chars.map(() => ({ rot: 0, intensity: 0 }));
+      let hovering = false;
+      let lastTime = 0;
 
-      label.addEventListener('mousemove', e => {
+      function setIntensities(clientX) {
         if (!freakyMode) return;
-        const labelRect = label.getBoundingClientRect();
-        const mx = e.clientX;
-        const my = e.clientY;
-
-        chars.forEach(ch => {
+        hovering = true;
+        chars.forEach((ch, i) => {
           const r = ch.getBoundingClientRect();
           const cx = r.left + r.width / 2;
-          const cy = r.top + r.height / 2;
-          const dx = mx - cx;
-          const dy = my - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const radius = 120;
-          const intensity = Math.max(0, 1 - dist / radius);
-          const i2 = intensity * intensity;
-
-          const pushY = dy > 0 ? i2 * 18 : i2 * -10;
-          const scX = 1 + i2 * 0.35;
-          const scY = 1 - i2 * 0.3;
-
-          ch.style.transform = 'scaleX(' + scX + ') scaleY(' + scY + ') translateY(' + pushY + 'px)';
+          const charW = r.width || 1;
+          const dist = Math.abs(clientX - cx);
+          const falloff = Math.max(0, 1 - dist / (charW * 1.3));
+          charStates[i].intensity = falloff * falloff;
         });
+      }
+      function clearIntensities() { hovering = false; }
 
-        const lmx = e.clientX - labelRect.left;
-        const lmy = e.clientY - labelRect.top;
-        const pctX = (lmx / labelRect.width - 0.5) * 6;
-        const pctY = (lmy / labelRect.height - 0.5) * 6;
-        label.style.borderRadius = (6 - pctY) + 'px ' + (6 + pctX) + 'px ' + (6 + pctY) + 'px ' + (6 - pctX) + 'px';
-      });
+      label.addEventListener('mousemove', e => setIntensities(e.clientX));
+      label.addEventListener('mouseleave', clearIntensities);
+      label.addEventListener('touchstart', e => setIntensities(e.touches[0].clientX), { passive: true });
+      label.addEventListener('touchmove', e => setIntensities(e.touches[0].clientX), { passive: true });
+      label.addEventListener('touchend', clearIntensities);
+      label.addEventListener('touchcancel', clearIntensities);
 
-      label.addEventListener('mouseleave', () => {
-        chars.forEach(ch => { ch.style.transform = ''; });
-        label.style.borderRadius = '6px';
-      });
+      function tick(now) {
+        const dt = lastTime ? Math.min(3, (now - lastTime) / 16.67) : 1;
+        lastTime = now;
+        chars.forEach((ch, i) => {
+          const s = charStates[i];
+          if (!hovering) s.intensity *= Math.pow(0.88, dt);
+          if (s.intensity > 0.01) {
+            s.rot += 11 * dt * s.intensity;
+          } else {
+            // Shortest-path decay back to 0
+            s.rot *= Math.pow(0.8, dt);
+            if (Math.abs(s.rot) < 0.1) s.rot = 0;
+          }
+          // Keep rot in (-180, 180] so decay always takes the short way home
+          s.rot = ((s.rot + 180) % 360 + 360) % 360 - 180;
+          ch.style.transform = 'rotateY(' + s.rot.toFixed(2) + 'deg)';
+        });
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
     });
+
+    // ===== 2022 jell-o magnetic chars (inspired by loonatiks.gr) =====
+    // Each char is a spring-following blob: it gets pulled toward the pointer
+    // and squished (compressed vertically, stretched horizontally) when the
+    // pointer is near it. Bouncy spring physics give the gummy rebound.
+    document.querySelectorAll('.effect-rubber').forEach(label => {
+      const chars = [...label.querySelectorAll('.char')];
+      const states = chars.map(() => ({
+        x: 0, y: 0, sx: 1, sy: 1,
+        tx: 0, ty: 0, tsx: 1, tsy: 1,
+        vx: 0, vy: 0, vsx: 0, vsy: 0
+      }));
+      let pointerX = null, pointerY = null;
+
+      function setPointer(px, py) {
+        if (!freakyMode) return;
+        pointerX = px; pointerY = py;
+      }
+      function clearPointer() { pointerX = null; pointerY = null; }
+
+      label.addEventListener('mousemove', e => setPointer(e.clientX, e.clientY));
+      label.addEventListener('mouseleave', clearPointer);
+      label.addEventListener('touchstart', e => setPointer(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+      label.addEventListener('touchmove', e => setPointer(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+      label.addEventListener('touchend', clearPointer);
+      label.addEventListener('touchcancel', clearPointer);
+
+      const stiffness = 0.18, damping = 0.55;
+      function tick() {
+        chars.forEach((ch, i) => {
+          const s = states[i];
+          if (pointerX !== null) {
+            const r = ch.getBoundingClientRect();
+            const origCx = r.left + r.width / 2 - s.x;
+            const origCy = r.top + r.height / 2 - s.y;
+            const dx = pointerX - origCx;
+            const dy = pointerY - origCy;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const radius = 120;
+            const prox = Math.max(0, 1 - dist / radius);
+            const p2 = prox * prox;
+            s.tx = dx * p2 * 0.35;
+            s.ty = dy * p2 * 0.35;
+            s.tsx = 1 - p2 * 0.95;
+            s.tsy = 1 - p2 * 0.95;
+          } else {
+            s.tx = 0; s.ty = 0; s.tsx = 1; s.tsy = 1;
+          }
+          ['x', 'y', 'sx', 'sy'].forEach(k => {
+            const diff = s['t' + k] - s[k];
+            s['v' + k] = (s['v' + k] + diff * stiffness) * damping;
+            s[k] += s['v' + k];
+          });
+          ch.style.transform =
+            'translate(' + s.x.toFixed(2) + 'px,' + s.y.toFixed(2) + 'px) scale(' + s.sx.toFixed(3) + ',' + s.sy.toFixed(3) + ')';
+        });
+        requestAnimationFrame(tick);
+      }
+      tick();
+    });
+
+    // ===== 2023 rainbow — fixed poster-derived palette =====
+    (function setup2023Rainbow() {
+      const hex = ['#A2C1CD', '#D298B4', '#D59945', '#A384B1', '#E176A3'];
+      const hexToRgb = h => {
+        const n = parseInt(h.slice(1), 16);
+        return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+      };
+      const glowColors = hex.map(h => {
+        const [r, g, b] = hexToRgb(h);
+        return 'rgba(' + r + ',' + g + ',' + b + ',0.35)';
+      });
+      const gradientStops = [...hex, hex[0]].join(', ');
+      const gradient = 'linear-gradient(110deg, ' + gradientStops + ')';
+
+      let keyframes = '@keyframes rainbowBorder2023 {';
+      hex.forEach((c, i) => {
+        const pct = (i / hex.length) * 100;
+        keyframes += pct.toFixed(2) + '% { box-shadow: 0 0 0 1px ' + c + ', 0 0 14px ' + glowColors[i] + '; }';
+      });
+      keyframes += '100% { box-shadow: 0 0 0 1px ' + hex[0] + ', 0 0 14px ' + glowColors[0] + '; }';
+      keyframes += '}';
+
+      // Move through exactly one full gradient width (= background-size) so the
+      // loop ends on the same visual as it started — no color jump on restart.
+      const slideKeyframes =
+        '@keyframes rainbowSlide2023 {' +
+        '  0% { background-position: 0% 0%; }' +
+        '  100% { background-position: -300% 0%; }' +
+        '}';
+      const style = document.createElement('style');
+      style.textContent =
+        '.effect-rainbow { background-image: ' + gradient + '; background-size: 300% 100%; }' +
+        'body.freaky-on .effect-rainbow:hover,' +
+        'body.freaky-on .effect-rainbow.is-touched {' +
+        '  animation: rainbowSlide2023 1.5s linear infinite, rainbowBorder2023 1.5s linear infinite;' +
+        '}' +
+        slideKeyframes +
+        keyframes;
+      document.head.appendChild(style);
+    })();
 
     // ===== Accordion + navigation =====
     const sections = [...document.querySelectorAll('.year')];
